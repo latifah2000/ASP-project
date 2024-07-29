@@ -24,19 +24,14 @@ namespace Dashboard.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var username=HttpContext.User.Identity.Name??null;  // get user data
+            var username=HttpContext.User.Identity.Name??null; 
 
-
-            //CookieOptions cookie = new CookieOptions(); // create  cookie
-            //cookie.Expires = DateTime.Now.AddMinutes(50); // set time long
-            //Response.Cookies.Append("userdata", username, cookie); // store user data in my cookie
 
 
             HttpContext.Session.SetString("userdata", username);
 
             ViewBag.Username = username;
 
-           // ViewBag.Username = Request.Cookies["userdata"]; // get user data from my cookie
 
             return View();
         }
@@ -108,7 +103,6 @@ namespace Dashboard.Controllers
 			return RedirectToAction("ProductDetails");
 		}
 
-		// GET: //Delete Operation for ProductDetails
 		public JsonResult DeleteDetails(int id)
 		{
 			var detailsDel = _context.productsDetails.SingleOrDefault(p => p.Id == id);
@@ -145,14 +139,13 @@ namespace Dashboard.Controllers
 				return NotFound("Product details not found");
 			}
 
-			// Update product details fields
 			existingProductDetails.Price = productDetails.Price;
 			existingProductDetails.Qty = productDetails.Qty;
 			existingProductDetails.Color = productDetails.Color;
 
 			if (photo != null && photo.Length > 0)
 			{
-				// Handle photo update
+				
 				var path = Path.Combine(_webHostEnvironment.WebRootPath, "img", photo.FileName);
 
 				try
@@ -165,7 +158,7 @@ namespace Dashboard.Controllers
 				}
 				catch (Exception ex)
 				{
-					// Log the exception
+					
 					_logger.LogError(ex, "Error saving file");
 					TempData["ErrorMessage"] = "Error saving file.";
 					return RedirectToAction("ProductDetails");
@@ -180,7 +173,7 @@ namespace Dashboard.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Log the exception
+				
 				_logger.LogError(ex, "Error updating product details");
 				TempData["ErrorMessage"] = "Error updating product details.";
 			}
@@ -189,7 +182,6 @@ namespace Dashboard.Controllers
 		}
 
 
-		// GET://Edit for Product details table
 		public IActionResult EditDetails(int id)
 		{
 			var productDetails = _context.productsDetails.SingleOrDefault(p => p.Id == id);
@@ -199,7 +191,7 @@ namespace Dashboard.Controllers
 				return NotFound();
 			}
 
-			ViewBag.Products = _context.products.ToList(); // Load products for dropdown
+			ViewBag.Products = _context.products.ToList(); 
 			return View(productDetails);
 		}
 
@@ -221,15 +213,12 @@ namespace Dashboard.Controllers
 
 
 
-            TempData["Add"] = "·„   „ «·≈÷«›… Ì—ÃÏ «· √ﬂœ „‰ ’Õ… «·„œŒ·« ";
+            TempData["Add"] = "Ì—ÃÏ «· √ﬂœ „‰ ’Õ… «·„œŒ·« ";
 
 
             var product = _context.products.ToList();
             return View("AddNewitems", product);
 
-            //_context.Add(products);
-            // _context.SaveChanges();
-            //return RedirectToAction("AddNewitems");
         }
 
         public IActionResult Update(Products Product)
