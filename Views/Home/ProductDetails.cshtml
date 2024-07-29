@@ -1,0 +1,195 @@
+﻿@model ProductsDetails
+@{
+	ViewData["Title"] = "Product Details Page";
+}
+
+<div class="container">
+	<div class="row ">
+		<div class="col text-center">
+			<h1 class="display-4"> <span class="badge bg-light bordred text-dark"> صفحة تفاصيل المنتجات </span> </h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col">
+			<button class="btn btn-primary" onclick="AddProDtil()"> <i class="fs-4 bi-cart-plus p-2"></i> اضف تفصيل لمنتج</button>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="addproducts">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"> إضافة  تفصيل لمنتج جديد </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+
+				<form asp-action="CreateDetails" method="post" enctype="multipart/form-data">
+					<div class="row">
+						<input type="hidden" asp-for="Id" class="form-control" />
+						<div class="col">
+							<label for="" class="form-label">اختر المنتج</label>
+							<select class="form-select" id="ProductId" asp-for="ProductId">
+								@foreach (var item in ViewBag.products)
+								{
+									<option value="@item.Id">@item.Name</option>
+								}
+
+							</select>
+						</div>
+
+						<div class="col">
+							<label for="" class="form-label"> صورة المنتج</label>
+							<input type="file" class="img-fluid" name="photo" accept="Images/*" />
+						</div>
+
+						<div class="col-sm-4">
+							<label for="" class="form-label"> سعر المنتج</label>
+							<input type="text" class="form-control" asp-for="Price" />
+						</div>
+
+						<div class="col-sm-6">
+							<label for="" class="form-label">الكمية  </label>
+							<input type="text" class="form-control" asp-for="Qty" />
+						</div>
+
+						<div class="col-sm-6">
+							<label for="" class="form-label">لون المنتج </label>
+							<input type="text" class="form-control" asp-for="Color" />
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء الامر </button>
+						<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">حفظ</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+<div class="modal" tabindex="-1" id="updateDetail">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">تعديل بيانات </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form asp-action="UpdateDetails" method="post" enctype="multipart/form-data">
+
+
+					<div class="row">
+						<input type="hidden" asp-for="Id" id="Id" class="form-control" />
+						<div class="col">
+							<label class="form-label" for=""> Name Of Products </label>
+							<select class="form-select" id="ProductId" asp-for="ProductId">
+								@foreach (var pro in ViewBag.products)
+								{
+									<option value="@pro.Id">@pro.Name</option>
+								}
+							</select>
+						</div>
+
+						<div class="col-sm-6 ">
+							<label class="form-label ">صورة المنتج</label>
+							<input type="file" class="form-control" id="photo" name="photo" accept="Images/*" />
+						</div>
+
+
+						<div class="col-sm-4">
+							<label for="" class="form-control"> سعر المنتج</label>
+							<input type="text" id="Price" name="Price" class="form-control" />
+							<span class="text-danger" asp-validation-for="Price"></span>
+						</div>
+
+						<div class="row mt-3">
+							<div class="col-sm-6">
+								<label for="" class="form-control"> كمية المنتج</label>
+								<input type="text" id="Qty" name="Qty" class="form-control" />
+								<span class="text-danger" asp-validation-for="Qty"></span>
+							</div>
+
+
+							<div class="col-sm-4">
+								<label for="" class="form-control"> لون المنتج</label>
+								<input type="text" id="Color" name="Color" class="form-control" />
+								<span class="text-danger" asp-validation-for="Color"></span>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء الامر  </button>
+							<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">حفظ</button>
+						</div>
+
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+<div class="modal" tabindex="-1" id="confirm">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">تأكيد الحذف</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>هل بالتأكيد تريد الحذف ؟</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء الأمر</button>
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="ConfirmDetails()">نعم</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<table class="table table-bordred">
+	<thead>
+		<tr>
+
+			<th>رقم المنتج </th>
+			<th>اسم المنتج</th>
+			<th>اللون </th>
+			<th>الكمية </th>
+			<th>السعر </th>
+			<th>الصورة </th>
+			<th colspan="2">إجراء</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var pro in ViewBag.ProductsDetails)
+		{
+			<tr>
+				<td>@pro.id</td>
+				<td>@pro.name</td>
+				<td>@pro.color</td>
+				<td>@pro.qty</td>
+				<td>@pro.price</td>
+				<td><img src="/img/@pro.img" width="150" height="100" /></td>
+				<td> <a onclick="ShowDelMessage(@pro.id)"> <i class="bi bi-archive-fill text-danger"></i> </a></td>
+				<td> <a onclick="updateDetail(@pro.id)"> <i class="bi bi-pencil-fill text-success"> </i>  </a></td>
+			</tr>
+		}
+	</tbody>
+</table>
+

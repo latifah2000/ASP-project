@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Products>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h1 class="display-4 "><span class="badge bg-light bordred text-dark">إضافة منتج جديد</span> </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" onclick="AddNewItems()">  <i class="fs-4 bi-cart-plus p-2"></i> أضافة منتج </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="newproducts">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> إضافة منتج جديد </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="CreateProducts" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-label" for="">اسم المنتج</label>
+                            <input type="text" id="newitem" asp-for="@Model.First().Name" class="form-control form-control-sm" />
+                        </div>
+                        <div class="col">
+                            <label class="form-label" for="">وصف المنتج </label>
+                            <input type="text" id="description" asp-for="@Model.First().Description" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء الأمر </button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">حفظ</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" tabindex="-1" id="update">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل بيانات </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Update" method="post">
+                    <div class="row">
+                        <input type="hidden" id="Id" name="Id" class="form-control" />
+                        <div class="col-sm-6">
+                            <label for="" class="form-control"> اسم المنتج</label>
+                            <input type="text" id="Name" name="Name" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="" class="form-control"> وصف المنتج</label>
+                            <input type="text" id="Description" name="Description" class="form-control" />
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col">
+
+                                <button type="submit" class="btn btn-primary">تعديل</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء الأمر</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="confirm">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تأكيد الحذف</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>هل بالتأكيد تريد الحذف ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء الأمر</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="Confirmdel()">نعم</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-bordred">
+    <thead>
+        <tr>
+            <th>رقم المنتج</th>
+            <th>اسم المنتج</th>
+            <th>وصف المنتج</th>
+            <th colspan="2">إجراء</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pro in Model)
+        {
+            <tr>
+                <td>@pro.Id</td>
+                <td>@pro.Name</td>
+                <td>@pro.Description</td>
+                <td> <a onclick="ShowDelMessage(@pro.Id)"> <i class="bi bi-archive-fill text-danger"></i> </a></td>
+                <td> <a onclick="update(@pro.Id)"> <i class="bi bi-pencil-fill text-success"> </i>  </a></td>
+            </tr>
+        }
+    </tbody>
+</table>
